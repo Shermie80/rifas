@@ -18,35 +18,38 @@ export function RaffleCard({ id, title, price, totalTickets, soldTickets, imageU
     const progress = (soldTickets / totalTickets) * 100
 
     return (
-        <Card className="overflow-hidden flex flex-col h-full border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-colors">
+        <Card className="group overflow-hidden flex flex-col h-full border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
             <div className="relative aspect-video w-full overflow-hidden">
                 <Image
                     src={imageUrl}
                     alt={title}
                     fill
-                    className="object-cover transition-transform hover:scale-105 duration-300"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
-            <CardHeader className="p-4">
-                <CardTitle className="line-clamp-1 text-lg">{title}</CardTitle>
+            <CardHeader className="p-5">
+                <CardTitle className="line-clamp-1 text-xl group-hover:text-primary transition-colors">{title}</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0 flex-1">
-                <div className="flex justify-between items-center mb-4">
-                    <span className="text-sm text-muted-foreground">Precio del boleto:</span>
-                    <span className="font-bold text-xl text-primary">${price.toFixed(2)}</span>
+            <CardContent className="p-5 pt-0 flex-1">
+                <div className="flex justify-between items-center mb-6">
+                    <span className="text-sm text-muted-foreground font-medium">Precio del boleto</span>
+                    <span className="font-bold text-2xl text-primary">${price.toFixed(2)}</span>
                 </div>
-                <div className="space-y-2">
-                    <div className="flex justify-between text-xs text-muted-foreground font-medium">
+                <div className="space-y-3">
+                    <div className="flex justify-between text-xs text-muted-foreground font-medium uppercase tracking-wider">
                         <span>{soldTickets} / {totalTickets} vendidos</span>
-                        <span>{progress.toFixed(1)}%</span>
+                        <span>{progress.toFixed(0)}%</span>
                     </div>
-                    <Progress value={progress} className="h-2" />
+                    <Progress value={progress} className="h-2.5 bg-secondary" />
                 </div>
             </CardContent>
-            <CardFooter className="p-4 pt-0">
+            <CardFooter className="p-5 pt-0">
                 <Link href={`/rifas/${id}`} className="w-full">
-                    <Button className="w-full font-semibold" size="lg">Participar ahora</Button>
+                    <Button className="w-full font-bold shadow-md shadow-primary/10 group-hover:shadow-primary/30 transition-all" size="lg">
+                        Participar ahora
+                    </Button>
                 </Link>
             </CardFooter>
         </Card>

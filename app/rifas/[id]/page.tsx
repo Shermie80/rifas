@@ -1,27 +1,44 @@
+"use client"
+
+import { useState } from "react"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { RAFFLES } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { Clock, Ticket, Share2 } from "lucide-react"
+import { Clock, Share2, Minus, Plus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
-export default async function RafflePage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params
-    const raffle = RAFFLES.find((r) => r.id === id)
+export default function RafflePage({ params }: { params: { id: string } }) {
+    const raffle = RAFFLES.find((r) => r.id === params.id)
+    const [quantity, setQuantity] = useState(1)
 
     if (!raffle) {
         notFound()
     }
 
     const progress = (raffle.soldTickets / raffle.totalTickets) * 100
+    const availableTickets = raffle.totalTickets - raffle.soldTickets
+    const winChance = ((quantity / raffle.totalTickets) * 100).toFixed(2)
+
+    const handleIncrement = () => {
+        if (quantity < availableTickets) {
+            setQuantity(quantity + 1)
+        }
+    }
+
+    const handleDecrement = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1)
+        }
+    }
 
     return (
         <div className="container py-10 md:py-16">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* Image Gallery */}
                 <div className="space-y-4">
-                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border bg-muted">
+                    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border-2 border-border/50 bg-muted shadow-xl">
                         <Image
                             src={raffle.imageUrl}
                             alt={raffle.title}
@@ -30,9 +47,9 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
                             priority
                         />
                     </div>
-                    <div className="grid grid-cols-4 gap-4">
+                    <div className="grid grid-cols-4 gap-3">
                         {raffle.images.map((img, index) => (
-                            <div key={index} className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted cursor-pointer hover:ring-2 ring-primary transition-all">
+                            <div key={index} className="relative aspect-video w-full overflow-hidden rounded-xl border-2 border-border/50 bg-muted cursor-pointer hover:ring-2 ring-primary transition-all hover:scale-105">
                                 <Image
                                     src={img}
                                     alt={`${raffle.title} thumbnail ${index + 1}`}
@@ -47,40 +64,86 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
                 {/* Info Section */}
                 <div className="flex flex-col space-y-8">
                     <div>
-                        <Badge className="mb-4">Rifa Activa</Badge>
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{raffle.title}</h1>
+                        <Badge className="mb-4 text-sm px-4 py-1">🔥 Rifa Activa</Badge>
+                        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">{raffle.title}</h1>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             {raffle.description}
                         </p>
                     </div>
 
-                    <div className="p-6 rounded-xl bg-card border shadow-sm space-y-6">
-                        <div className="flex justify-between items-end">
+                    <div className="p-8 rounded-2xl bg-gradient-to-br from-card to-card/50 border-2 border-border/50 shadow-xl space-y-6">
+                        <div className="flex justify-between items-end pb-6 border-b border-border/50">
                             <div>
-                                <p className="text-sm text-muted-foreground mb-1">Precio del boleto</p>
-                                <p className="text-4xl font-bold text-primary">${raffle.price.toFixed(2)} <span className="text-lg text-muted-foreground font-normal">USD</span></p>
+                                <p className="text-sm text-muted-foreground mb-2 font-medium">Precio por boleto</p>
+                                <p className="text-5xl font-bold text-primary">${raffle.price.toFixed(2)} <span className="text-xl text-muted-foreground font-normal">USD</span></p>
                             </div>
                             <div className="text-right">
-                                <div className="flex items-center gap-2 text-destructive font-bold mb-1">
-                                    <Clock className="h-5 w-5" />
+                                <div className="flex items-center gap-2 text-destructive font-bold mb-1 text-lg">
+                                    <Clock className="h-6 w-6" />
                                     <span>12 : 08 : 45 : 22</span>
                                 </div>
-                                <p className="text-xs text-muted-foreground">Tiempo restante</p>
+                                <p className="text-xs text-muted-foreground font-medium">Tiempo restante</p>
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-sm font-medium">
+                        <div className="space-y-3">
+                            <div className="flex justify-between text-sm font-semibold">
                                 <span>Boletos Vendidos</span>
-                                <span>{raffle.soldTickets} / {raffle.totalTickets}</span>
+                                <span className="text-primary">{raffle.soldTickets} / {raffle.totalTickets}</span>
                             </div>
-                            <Progress value={progress} className="h-3" />
+                            <Progress value={progress} className="h-3 bg-secondary" />
+                        </div>
+
+                        {/* Quantity Selector */}
+                        <div className="space-y-4 pt-4">
+                            <label className="text-sm font-semibold">Cantidad de boletos</label>
+                            <div className="flex items-center gap-4">
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-12 w-12 rounded-xl border-2"
+                                    onClick={handleDecrement}
+                                    disabled={quantity <= 1}
+                                >
+                                    <Minus className="h-5 w-5" />
+                                </Button>
+                                <div className="flex-1 text-center">
+                                    <span className="text-4xl font-bold text-primary">{quantity}</span>
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-12 w-12 rounded-xl border-2"
+                                    onClick={handleIncrement}
+                                    disabled={quantity >= availableTickets}
+                                >
+                                    <Plus className="h-5 w-5" />
+                                </Button>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm text-muted-foreground">
+                                    Total: <span className="text-xl font-bold text-foreground">${(raffle.price * quantity).toFixed(2)}</span> USD
+                                </p>
+                            </div>
                         </div>
 
                         <div className="pt-4">
-                            <Button size="lg" className="w-full text-lg h-14">
-                                Participar Ahora
+                            <Button size="lg" className="w-full text-lg h-16 font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-[1.02]">
+                                Comprar número
                             </Button>
+
+                            {/* Win Chance Bar */}
+                            <div className="mt-6 p-4 rounded-xl bg-primary/10 border border-primary/20">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-sm font-semibold text-primary">Probabilidad de ganar</span>
+                                    <span className="text-lg font-bold text-primary">{winChance}%</span>
+                                </div>
+                                <Progress value={parseFloat(winChance)} className="h-2 bg-primary/20" />
+                                <p className="text-xs text-muted-foreground mt-2 text-center">
+                                    Con {quantity} {quantity === 1 ? 'boleto' : 'boletos'} de {raffle.totalTickets} disponibles
+                                </p>
+                            </div>
+
                             <p className="text-center text-xs text-muted-foreground mt-4">
                                 Al participar aceptas nuestros términos y condiciones.
                             </p>

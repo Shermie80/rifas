@@ -28,8 +28,8 @@ export const RAFFLES = [
         price: 7.50,
         totalTickets: 800,
         soldTickets: 300,
-        imageUrl: "https://placehold.co/600x400/1e293b/ffffff?text=Viaje",
+        imageUrl: "/images/raffle-detail.png",
         endDate: "2025-01-15T23:59:59",
-        images: ["https://placehold.co/600x400/1e293b/ffffff?text=Viaje"],
+        images: ["/images/raffle-detail.png", "/images/hero.png"],
     },
 ]
