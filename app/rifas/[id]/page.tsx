@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { RAFFLES } from "@/lib/data"
@@ -9,8 +9,9 @@ import { Progress } from "@/components/ui/progress"
 import { Clock, Share2, Minus, Plus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
-export default function RafflePage({ params }: { params: { id: string } }) {
-    const raffle = RAFFLES.find((r) => r.id === params.id)
+export default function RafflePage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params)
+    const raffle = RAFFLES.find((r) => r.id === id)
     const [quantity, setQuantity] = useState(1)
 
     if (!raffle) {
