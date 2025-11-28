@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { revalidatePath } from "next/cache"
+import { AvatarUpload } from "@/components/avatar-upload"
 
 export default async function AccountPage() {
     const supabase = await createClient()
@@ -106,17 +107,9 @@ export default async function AccountPage() {
                             />
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="avatarUrl">URL del Avatar (Opcional)</Label>
-                            <Input
-                                id="avatarUrl"
-                                name="avatarUrl"
-                                defaultValue={profile?.avatar_url || ""}
-                                placeholder="https://ejemplo.com/avatar.jpg"
-                            />
-                            <p className="text-xs text-muted-foreground">
-                                Por ahora puedes pegar una URL de imagen. Próximamente subida de archivos.
-                            </p>
+                        <div className="space-y-4">
+                            <Label>Foto de perfil</Label>
+                            <AvatarUpload name="avatarUrl" defaultValue={profile?.avatar_url} />
                         </div>
 
                         <div className="pt-4 flex justify-end">

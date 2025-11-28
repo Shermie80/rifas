@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { Ticket, Trash } from "lucide-react"
+import { DeleteRaffleButton } from "./delete-raffle-button"
 
 interface RaffleCardProps {
     id: string
@@ -12,9 +14,10 @@ interface RaffleCardProps {
     soldTickets: number
     imageUrl: string
     endDate: string
+    isAdmin?: boolean
 }
 
-export function RaffleCard({ id, title, price, totalTickets, soldTickets, imageUrl, endDate }: RaffleCardProps) {
+export function RaffleCard({ id, title, price, totalTickets, soldTickets, imageUrl, endDate, isAdmin }: RaffleCardProps) {
     const progress = (soldTickets / totalTickets) * 100
 
     return (
@@ -28,6 +31,8 @@ export function RaffleCard({ id, title, price, totalTickets, soldTickets, imageU
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                {/* Admin Delete Button */}
+                {isAdmin && <DeleteRaffleButton id={id} />}
             </div>
             <CardHeader className="p-5">
                 <CardTitle className="line-clamp-1 text-xl group-hover:text-primary transition-colors">{title}</CardTitle>
@@ -35,7 +40,10 @@ export function RaffleCard({ id, title, price, totalTickets, soldTickets, imageU
             <CardContent className="p-5 pt-0 flex-1">
                 <div className="flex justify-between items-center mb-6">
                     <span className="text-sm text-muted-foreground font-medium">Precio del boleto</span>
-                    <span className="font-bold text-2xl text-primary">${price.toFixed(2)}</span>
+                    <div className="flex items-center gap-1 text-primary font-bold">
+                        <Ticket className="h-4 w-4" />
+                        <span>$ {price.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
+                    </div>
                 </div>
                 <div className="space-y-3">
                     <div className="flex justify-between text-xs text-muted-foreground font-medium uppercase tracking-wider">
