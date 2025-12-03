@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, Ticket } from "lucide-react"
 import { RaffleGallery } from "@/components/raffle-gallery"
 import { TicketPurchase } from "@/components/ticket-purchase"
+import { CountdownTimer } from "@/components/countdown-timer"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -57,6 +58,13 @@ export default async function RaffleDetailPage({ params }: { params: Promise<{ i
                         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
                             {raffle.name}
                         </h1>
+
+                        {raffle.status === 'active' && raffle.end_date && (
+                            <div className="mb-8">
+                                <p className="text-sm font-medium text-primary/80 uppercase tracking-widest mb-2">Tiempo restante</p>
+                                <CountdownTimer targetDate={raffle.end_date} className="justify-start" />
+                            </div>
+                        )}
 
                         <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap mb-8">
                             {raffle.description}

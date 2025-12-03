@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { User, LogOut, Settings, Bell, Ticket } from "lucide-react"
+import { User, LogOut, Settings, Ticket } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import Image from "next/image"
 import logo from "@/assets/logo.png"
@@ -13,6 +13,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { NotificationsMenu } from "@/components/notifications-menu"
 
 export async function Navbar() {
     const supabase = await createClient()
@@ -33,7 +34,7 @@ export async function Navbar() {
         <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40">
             <div className="container flex h-16 items-center justify-between">
                 <Link href="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity">
-                    <Image src={logo} alt="RifasYa Logo" width={50} height={50} className="w-12 h-12 object-contain" />
+                    <Image src={logo} alt="RifasYa Logo" width={60} height={60} className="w-16 h-16 object-contain" />
                 </Link>
                 <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
                     {["Inicio", "Rifas", "Ganadores", "Cómo funciona"].map((item) => (
@@ -50,21 +51,7 @@ export async function Navbar() {
                 <div className="flex items-center gap-3">
                     {user ? (
                         <>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="relative cursor-pointer text-muted-foreground hover:text-primary transition-colors">
-                                        <Bell className="h-5 w-5" />
-                                        <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background"></span>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-64 border-white/10 bg-black/80 backdrop-blur-xl text-white">
-                                    <DropdownMenuLabel>Notificaciones</DropdownMenuLabel>
-                                    <DropdownMenuSeparator className="bg-white/10" />
-                                    <DropdownMenuItem className="text-muted-foreground justify-center py-4">
-                                        Sin notificaciones
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <NotificationsMenu user={user} />
 
                             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-blue-200 text-sm font-medium">
                                 <span>$ {profile?.balance?.toFixed(2) || "0.00"}</span>

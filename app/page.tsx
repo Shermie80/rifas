@@ -76,13 +76,12 @@ export default async function Home() {
       {/* Featured Raffles */}
       <section className="py-20 md:py-32 relative">
         <div className="container">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-start mb-12 gap-4">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Rifas recientes</h2>
-              <p className="text-muted-foreground text-lg">No te pierdas las oportunidades más populares del momento.</p>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Rifas recientes</h2>
             </div>
             <Link href="/rifas">
-              <Button variant="ghost" className="group cursor-pointer">
+              <Button variant="ghost" className="group cursor-pointer border border-white/10">
                 Ver todas
                 <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
               </Button>

@@ -55,7 +55,7 @@ export function RaffleCard({ id, title, price, totalTickets, soldTickets, imageU
             </CardContent>
             <CardFooter className="p-5 pt-0">
                 <Link href={`/rifas/${id}`} className="w-full">
-                    <Button className="w-full font-bold shadow-md shadow-primary/10 group-hover:shadow-primary/30 transition-all" size="lg">
+                    <Button className="w-full font-bold shadow-md shadow-primary/10 group-hover:shadow-primary/30 transition-all cursor-pointer" size="lg">
                         Participar ahora
                     </Button>
                 </Link>
